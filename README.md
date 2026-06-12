@@ -1,3 +1,7 @@
+[![Lint](https://github.com/angeleyesffx/webdriverio-mobile-cucumber-automation-template/actions/workflows/lint.yml/badge.svg)](https://github.com/angeleyesffx/webdriverio-mobile-cucumber-automation-template/actions/workflows/lint.yml)
+[![Android Tests](https://github.com/angeleyesffx/webdriverio-mobile-cucumber-automation-template/actions/workflows/test-android.yml/badge.svg)](https://github.com/angeleyesffx/webdriverio-mobile-cucumber-automation-template/actions/workflows/test-android.yml)
+[![iOS Tests](https://github.com/angeleyesffx/webdriverio-mobile-cucumber-automation-template/actions/workflows/test-ios.yml/badge.svg)](https://github.com/angeleyesffx/webdriverio-mobile-cucumber-automation-template/actions/workflows/test-ios.yml)
+
 # Prepare Your Environment Guide:
 
 If you already have NodeJS environment, you can skip the Prepare your environment Guide,
