@@ -1,20 +1,28 @@
-const projectPath = require("path");
-const {config} = require("./wdio.conf");
-const iosAppPath = projectPath.join(process.cwd(), "application/ios/test.app");
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { config as baseConfig } from './wdio.conf.js';
 
-config.port = 4723;
-config.specs = ["./tests/features/*.feature"];
-config.capabilities = [{
-       //This capabilities only works for local Simulation Appium web test
-       "appium:platformVersion": "17.2",
-       "appium:platformName": "iOS",
-       "appium:deviceName": "iPhone 15",
-       "appium:automationName": "XCUItest",
-       "appium:appium.bundleId": process.env.BUNDLE_ID,
-       "appium:app": iosAppPath,
-       "appium:unlockType": "pin",
-       "appium:unlockKey": "1234",
-       "appium:fullReset": true
-}]
+const iosAppPath = join(process.cwd(), 'application/ios/test.app');
+const hasApp = existsSync(iosAppPath);
 
-exports.config = config;
+// Falls back to Safari browser when no .app is present (e.g. CI without a real app)
+const appCapability = hasApp
+    ? {
+        ...(process.env.BUNDLE_ID && { 'appium:bundleId': process.env.BUNDLE_ID }),
+        'appium:app': iosAppPath
+    }
+    : { browserName: 'Safari' };
+
+export const config = {
+    ...baseConfig,
+    port: 4723,
+    specs: ['./features/**/*.feature'],
+    capabilities: [{
+        'appium:platformVersion': process.env.IOS_PLATFORM_VERSION || '17.2',
+        'appium:platformName': 'iOS',
+        'appium:deviceName': process.env.IOS_DEVICE_NAME || 'iPhone 15',
+        'appium:automationName': 'XCUITest',
+        ...appCapability,
+        'appium:fullReset': true
+    }]
+};

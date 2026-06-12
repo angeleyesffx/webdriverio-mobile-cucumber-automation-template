@@ -1,0 +1,65 @@
+name: iOS Tests
+
+# macOS runners are billed at 10x the Linux rate.
+# This workflow is triggered manually to avoid unexpected cost.
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Cucumber tag expression (e.g. @smoke, @regression)'
+        required: false
+        default: '@smoke'
+
+jobs:
+  test-ios:
+    name: iOS Smoke Tests
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download and extract iOS app from latest release
+        run: |
+          gh release download \
+            --repo webdriverio/native-demo-app \
+            --pattern 'ios.simulator.*.zip' \
+            --dir application/ios/
+          cd application/ios && unzip -q *.zip
+          APP=$(find . -name "*.app" -type d | head -1)
+          mv "$APP" test.app
+          rm *.zip
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Install Appium XCUITest driver
+        run: ./node_modules/.bin/appium driver install xcuitest
+
+      - name: Boot iOS Simulator
+        run: |
+          xcrun simctl boot "iPhone 15" || true
+          xcrun simctl bootstatus "iPhone 15" -b
+
+      - name: Run iOS smoke tests
+        run: npm run test_ios -- "${{ github.event.inputs.tags }}"
+        env:
+          PLATFORM: ios
+          IOS_PLATFORM_VERSION: '17.2'
+          IOS_DEVICE_NAME: iPhone 15
+          USERNAME: test@webdriver.io
+          PASSWORD: Test1234!
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-reports-${{ github.run_number }}
+          path: reports/
+          retention-days: 7

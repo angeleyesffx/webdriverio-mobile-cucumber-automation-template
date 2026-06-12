@@ -1,12 +1,14 @@
-Feature: The Internet Guinea Pig Website
+@login @regression
+Feature: User Authentication
 
-  Scenario Outline: As a user, I can log into the secure area
-
+  @smoke @positive @C1001
+  Scenario: Valid credentials complete the login flow
     Given I am on the login page
-    When I login with <username> and <password>
-    Then I should see a flash message saying <message>
+    When I login with test@webdriver.io and Test1234!
+    Then I should see a native alert saying Success
 
-    Examples:
-      | username | password             | message                        |
-      | tomsmith | SuperSecretPassword! | You logged into a secure area! |
-      | foobar   | barfoo               | Your username is invalid!      |
+  @smoke @positive @C1002
+  Scenario: Valid credentials complete the sign-up flow
+    Given I am on the login page
+    When I sign up with test@webdriver.io and Test1234!
+    Then I should see a native alert saying Signed Up

@@ -43,24 +43,11 @@ export const config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 10,
+    maxInstances: 1,
     //
-    // If you have trouble getting all important capabilities together, check out the
-    // Sauce Labs platform configurator - a great tool to configure your capabilities:
-    // https://saucelabs.com/platform/platform-configurator
+    // Capabilities are defined in platform-specific config files (wdio.conf.android.js / wdio.conf.ios.js).
     //
-    capabilities: [{
-        browserName: 'vscode',
-        browserVersion: 'stable', // also possible: "insiders" or a specific version e.g. "1.80.0"
-        'wdio:vscodeOptions': {
-            // points to directory where extension package.json is located
-            extensionPath: __dirname,
-            // optional VS Code settings
-            userSettings: {
-                "editor.fontSize": 14
-            }
-        }
-    }],
+    capabilities: [],
 
     //
     // ===================
@@ -109,7 +96,7 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['vscode'],
+    services: [['appium', { command: './node_modules/.bin/appium' }]],
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -136,8 +123,8 @@ export const config = {
 
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
-        // <string[]> (file/dir) require files before executing features
-        require: [''],
+        // <string[]> (file/dir) import files before executing features (ESM)
+        import: ['./features/step-definitions/*.js'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -270,8 +257,12 @@ export const config = {
      * @param {number}                 result.duration  duration of scenario in milliseconds
      * @param {object}                 context          Cucumber World object
      */
-    // afterScenario: function (world, result, context) {
-    // },
+    afterScenario: async function (_world, result) {
+        if (!result.passed) {
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            await browser.saveScreenshot(`./reports/screenshots/failure_${timestamp}.png`);
+        }
+    },
     /**
      *
      * Runs after a Cucumber Feature.

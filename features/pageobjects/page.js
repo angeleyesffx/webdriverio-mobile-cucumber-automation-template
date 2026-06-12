@@ -1,18 +1,14 @@
-import { browser } from '@wdio/globals'
+import { $ } from '@wdio/globals';
 import * as dotenv from 'dotenv';
 
-dotenv.config({ path: `./configuration/.env`})
+dotenv.config({ path: './configuration/.env' });
 
-/**
-* main page object containing all methods, selectors and functionality
-* that is shared across all page objects
-*/
-module.exports = class Page {
-    /**
-    * Opens a sub page of the page
-    * @param path path of the sub page (e.g. /path/to/page.html)
-    */
-    open (path) {
-        return browser.url(`https://the-internet.herokuapp.com/${path}`)
+export default class Page {
+    get screenSelector() {
+        throw new Error('screenSelector must be defined in subclass');
+    }
+
+    async waitForIsShown(isShown = true) {
+        return $(this.screenSelector).waitForDisplayed({ reverse: !isShown });
     }
 }

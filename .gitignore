@@ -5,3 +5,9 @@ tests/.DS_Store
 tests/pageobjects/.DS_Store
 /node_modules
 /window_dump.xml
+configuration/.env
+/reports/
+application/**/*.apk
+application/**/*.ipa
+application/**/*.app
+application/**/*.zip
