@@ -44,7 +44,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - name: Install Appium UIAutomator2 driver
-        run: ./node_modules/.bin/appium driver install --source local ./node_modules/appium-uiautomator2-driver
+        run: ./node_modules/.bin/appium driver install --source npm appium-uiautomator2-driver@3.10.0
 
       - name: Enable KVM for hardware acceleration
         run: |

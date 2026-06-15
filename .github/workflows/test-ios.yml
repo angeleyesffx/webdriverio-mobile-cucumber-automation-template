@@ -40,7 +40,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - name: Install Appium XCUITest driver
-        run: ./node_modules/.bin/appium driver install --source local ./node_modules/appium-xcuitest-driver
+        run: ./node_modules/.bin/appium driver install --source npm appium-xcuitest-driver@9.10.5
 
       - name: Boot iOS Simulator
         run: |
