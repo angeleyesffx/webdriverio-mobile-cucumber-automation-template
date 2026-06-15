@@ -44,15 +44,15 @@ jobs:
 
       - name: Boot iOS Simulator
         run: |
-          xcrun simctl boot "iPhone 15" || true
-          xcrun simctl bootstatus "iPhone 15" -b
+          xcrun simctl boot "iPhone 16" || true
+          xcrun simctl bootstatus "iPhone 16" -b
 
       - name: Run iOS smoke tests
         run: npm run test_ios -- "${{ github.event.inputs.tags }}"
         env:
           PLATFORM: ios
-          IOS_PLATFORM_VERSION: '17.2'
-          IOS_DEVICE_NAME: iPhone 15
+          IOS_PLATFORM_VERSION: '18.0'
+          IOS_DEVICE_NAME: iPhone 16
           USERNAME: test@webdriver.io
           PASSWORD: Test1234!
 
