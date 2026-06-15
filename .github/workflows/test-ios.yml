@@ -24,7 +24,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --prefer-offline
 
       - name: Download and extract iOS app from latest release
         run: |
@@ -40,7 +40,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - name: Install Appium XCUITest driver
-        run: ./node_modules/.bin/appium driver install xcuitest
+        run: ./node_modules/.bin/appium driver install xcuitest@9
 
       - name: Boot iOS Simulator
         run: |
