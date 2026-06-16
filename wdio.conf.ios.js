@@ -17,11 +17,16 @@ export const config = {
     ...baseConfig,
     port: 4723,
     specs: ['./features/**/*.feature'],
+    // First run on a fresh CI runner builds and signs WebDriverAgent via xcodebuild,
+    // which alone can take longer than the default 2-minute session timeout.
+    connectionRetryTimeout: 300000,
     capabilities: [{
         'appium:platformVersion': process.env.IOS_PLATFORM_VERSION || '18.5',
         'appium:platformName': 'iOS',
         'appium:deviceName': process.env.IOS_DEVICE_NAME || 'iPhone 16',
         'appium:automationName': 'XCUITest',
+        'appium:wdaLaunchTimeout': 300000,
+        'appium:wdaConnectionTimeout': 300000,
         ...appCapability,
         'appium:fullReset': true
     }]
