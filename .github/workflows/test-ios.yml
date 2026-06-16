@@ -42,6 +42,18 @@ jobs:
       - name: Install Appium XCUITest driver
         run: ./node_modules/.bin/appium driver install --source npm appium-xcuitest-driver@9.10.5 || true
 
+      # WebDriverAgent is compiled by xcodebuild on first use, which alone can take
+      # several minutes on a cold GitHub-hosted macOS runner. Caching the derived-data
+      # output lets later runs relink incrementally instead of rebuilding from scratch.
+      - name: Cache WebDriverAgent build
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/appium-xcuitest-driver/node_modules/Build
+            node_modules/appium-xcuitest-driver/node_modules/ModuleCache.noindex
+            node_modules/appium-xcuitest-driver/node_modules/SDKStatCaches.noindex
+          key: wda-build-${{ runner.os }}-xcuitest-9.10.5-${{ hashFiles('package-lock.json') }}
+
       - name: Boot iOS Simulator
         run: |
           xcrun simctl boot "iPhone 16" || true

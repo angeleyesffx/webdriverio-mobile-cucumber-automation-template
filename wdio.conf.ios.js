@@ -17,17 +17,19 @@ export const config = {
     ...baseConfig,
     port: 4723,
     specs: ['./features/**/*.feature'],
-    // Simulator boot (~100s) + app install (~20s) + WDA xcodebuild from a cold
-    // derived-data cache (2-5min) can together exceed a 5-minute session timeout,
-    // so the client-side budget needs more headroom than any single inner step.
-    connectionRetryTimeout: 600000,
+    // Simulator boot (~2min) + log capture & app install (~2min) + a cold WDA
+    // xcodebuild compile (verified via showXcodeLog: it's genuinely compiling,
+    // not stuck) can together take 10+ minutes on a GitHub-hosted macOS runner.
+    // The outer client timeout must exceed setup time + the inner WDA timeout,
+    // otherwise it aborts before WDA's own timeout has a chance to fire.
+    connectionRetryTimeout: 900000,
     capabilities: [{
         'appium:platformVersion': process.env.IOS_PLATFORM_VERSION || '18.5',
         'appium:platformName': 'iOS',
         'appium:deviceName': process.env.IOS_DEVICE_NAME || 'iPhone 16',
         'appium:automationName': 'XCUITest',
-        'appium:wdaLaunchTimeout': 540000,
-        'appium:wdaConnectionTimeout': 540000,
+        'appium:wdaLaunchTimeout': 600000,
+        'appium:wdaConnectionTimeout': 600000,
         // Surface xcodebuild's own output if WDA fails to build/launch instead
         // of just seeing a silent client-side timeout.
         'appium:showXcodeLog': true,
