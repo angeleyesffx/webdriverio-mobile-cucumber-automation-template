@@ -51,7 +51,7 @@ jobs:
         run: npm run test_ios -- "${{ github.event.inputs.tags }}"
         env:
           PLATFORM: ios
-          IOS_PLATFORM_VERSION: '18.0'
+          IOS_PLATFORM_VERSION: '18.5'
           IOS_DEVICE_NAME: iPhone 16
           USERNAME: test@webdriver.io
           PASSWORD: Test1234!

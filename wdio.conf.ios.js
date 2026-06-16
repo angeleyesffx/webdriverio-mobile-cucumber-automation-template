@@ -18,7 +18,7 @@ export const config = {
     port: 4723,
     specs: ['./features/**/*.feature'],
     capabilities: [{
-        'appium:platformVersion': process.env.IOS_PLATFORM_VERSION || '18.0',
+        'appium:platformVersion': process.env.IOS_PLATFORM_VERSION || '18.5',
         'appium:platformName': 'iOS',
         'appium:deviceName': process.env.IOS_DEVICE_NAME || 'iPhone 16',
         'appium:automationName': 'XCUITest',
