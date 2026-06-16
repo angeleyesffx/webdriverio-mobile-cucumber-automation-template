@@ -10,6 +10,9 @@ on:
         required: false
         default: '@smoke'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   test-ios:
     name: iOS Smoke Tests
