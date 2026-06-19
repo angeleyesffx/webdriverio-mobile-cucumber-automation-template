@@ -1,14 +1,30 @@
 @login @regression
 Feature: User Authentication
 
-  @smoke @positive @C1001
-  Scenario: Valid credentials complete the login flow
+  @smoke @positive
+  Scenario Outline: <action> with valid credentials
     Given I am on the login page
-    When I login with test@webdriver.io and Test1234!
-    Then I should see a native alert saying Success
+    When I <step> with valid credentials
+    Then I should see a native alert saying <message>
 
-  @smoke @positive @C1002
-  Scenario: Valid credentials complete the sign-up flow
+    @C1001
+    Examples: Login
+      | action | step  | message |
+      | Login  | login | Success |
+
+    @C1002
+    Examples: Sign Up
+      | action  | step    | message   |
+      | Sign Up | sign up | Signed Up |
+
+  @negative @C1003
+  Scenario: Login with invalid credentials shows an error
     Given I am on the login page
-    When I sign up with test@webdriver.io and Test1234!
-    Then I should see a native alert saying Signed Up
+    When I login with invalid credentials
+    Then I should see a native alert saying An error has occurred
+
+  @negative @C1004
+  Scenario: Login with empty credentials shows an error
+    Given I am on the login page
+    When I login with empty credentials
+    Then I should see a native alert saying An error has occurred

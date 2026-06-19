@@ -1,7 +1,7 @@
 name: Android Tests
 
 # Runs automatically on push to main and on manual dispatch.
-# wdio.conf.android.js auto-detects the APK and uses it; falls back to Chrome if absent.
+# wdio.conf.android.ts auto-detects the APK and uses it; falls back to Chrome if absent.
 on:
   push:
     branches: [main]

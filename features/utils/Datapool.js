@@ -2,15 +2,15 @@ export class DataPool {
     static credentials = {
         valid: {
             username: process.env.USERNAME || 'test@webdriver.io',
-            password: process.env.PASSWORD || 'Test1234!'
+            password: process.env.PASSWORD || 'Test1234!',
         },
         invalid: {
             username: 'invalid-email',
-            password: 'short'
+            password: 'short',
         },
         empty: {
             username: '',
-            password: ''
-        }
-    }
+            password: '',
+        },
+    };
 }

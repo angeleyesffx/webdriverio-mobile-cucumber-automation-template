@@ -5,12 +5,11 @@ import { config as baseConfig } from './wdio.conf.js';
 const androidAppPath = join(process.cwd(), 'application/android/test.apk');
 const hasApp = existsSync(androidAppPath);
 
-// Falls back to Chrome browser when no APK is present (e.g. CI without a real app)
 const appCapability = hasApp
     ? {
-        ...(process.env.APP_ID && { 'appium:bundleId': process.env.APP_ID }),
-        'appium:app': androidAppPath
-    }
+          ...(process.env.APP_ID && { 'appium:bundleId': process.env.APP_ID }),
+          'appium:app': androidAppPath
+      }
     : { browserName: 'Chrome' };
 
 export const config = {

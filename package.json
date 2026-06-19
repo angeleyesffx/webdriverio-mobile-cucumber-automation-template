@@ -12,6 +12,8 @@
     "@wdio/testrail-reporter": "^0.6.0",
     "appium": "^2.19.0",
     "appium-uiautomator2-driver": "^3.10.0",
+    "appium-xcuitest-driver": "^9.10.5",
+    "prettier": "^3.3.0",
     "wdio-wait-for": "^3.0.11"
   },
   "scripts": {
@@ -21,8 +23,7 @@
     "prettier:fix": "prettier . --write",
     "test": "./node_modules/.bin/wdio wdio.conf.js",
     "test_ios": "./node_modules/.bin/wdio wdio.conf.ios.js --cucumberOpts.tags",
-    "test_android": "./node_modules/.bin/wdio wdio.conf.android.js --cucumberOpts.tags",
-    "wdio": "wdio run ./wdio.conf.js"
+    "test_android": "./node_modules/.bin/wdio wdio.conf.android.js --cucumberOpts.tags"
   },
   "dependencies": {
     "dotenv": "16.4.0",
