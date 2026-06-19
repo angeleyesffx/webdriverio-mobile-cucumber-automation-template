@@ -1,32 +1,32 @@
 {
-  "name": "NodeJs_Cucumber_WebdriverIO_Mobile",
-  "type": "module",
-  "devDependencies": {
-    "@cucumber/cucumber": "^10.3.1",
-    "@wdio/appium-service": "^9.28.0",
-    "@wdio/globals": "^9.28.0",
-    "@wdio/cli": "^9.28.0",
-    "@wdio/cucumber-framework": "^9.28.0",
-    "@wdio/local-runner": "^9.28.0",
-    "@wdio/spec-reporter": "^9.28.0",
-    "@wdio/testrail-reporter": "^0.6.0",
-    "appium": "^2.19.0",
-    "appium-uiautomator2-driver": "^3.10.0",
-    "appium-xcuitest-driver": "^9.10.5",
-    "prettier": "^3.3.0",
-    "wdio-wait-for": "^3.0.11"
-  },
-  "scripts": {
-    "lint": "eslint . --ext .js",
-    "lint:fix": "eslint . --ext .js --fix",
-    "prettier": "prettier . --check",
-    "prettier:fix": "prettier . --write",
-    "test": "./node_modules/.bin/wdio wdio.conf.js",
-    "test_ios": "./node_modules/.bin/wdio wdio.conf.ios.js --cucumberOpts.tags",
-    "test_android": "./node_modules/.bin/wdio wdio.conf.android.js --cucumberOpts.tags"
-  },
-  "dependencies": {
-    "dotenv": "16.4.0",
-    "eslint": "8.56.0"
-  }
+    "name": "NodeJs_Cucumber_WebdriverIO_Mobile",
+    "type": "module",
+    "devDependencies": {
+        "@cucumber/cucumber": "^10.3.1",
+        "@wdio/appium-service": "^9.28.0",
+        "@wdio/globals": "^9.28.0",
+        "@wdio/cli": "^9.28.0",
+        "@wdio/cucumber-framework": "^9.28.0",
+        "@wdio/local-runner": "^9.28.0",
+        "@wdio/spec-reporter": "^9.28.0",
+        "@wdio/testrail-reporter": "^0.6.0",
+        "appium": "^2.19.0",
+        "appium-uiautomator2-driver": "^3.10.0",
+        "appium-xcuitest-driver": "^9.10.5",
+        "prettier": "^3.3.0",
+        "wdio-wait-for": "^3.0.11"
+    },
+    "scripts": {
+        "lint": "eslint . --ext .js",
+        "lint:fix": "eslint . --ext .js --fix",
+        "prettier": "prettier . --check",
+        "prettier:fix": "prettier . --write",
+        "test": "./node_modules/.bin/wdio wdio.conf.js",
+        "test_ios": "./node_modules/.bin/wdio wdio.conf.ios.js --cucumberOpts.tags",
+        "test_android": "./node_modules/.bin/wdio wdio.conf.android.js --cucumberOpts.tags"
+    },
+    "dependencies": {
+        "dotenv": "16.4.0",
+        "eslint": "8.56.0"
+    }
 }

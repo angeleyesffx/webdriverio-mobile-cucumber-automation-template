@@ -3,78 +3,78 @@ name: iOS Tests
 # macOS runners are billed at 10x the Linux rate.
 # This workflow is triggered manually to avoid unexpected cost.
 on:
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: 'Cucumber tag expression (e.g. @smoke, @regression)'
-        required: false
-        default: '@smoke'
+    workflow_dispatch:
+        inputs:
+            tags:
+                description: 'Cucumber tag expression (e.g. @smoke, @regression)'
+                required: false
+                default: '@smoke'
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  test-ios:
-    name: iOS Smoke Tests
-    runs-on: macos-latest
+    test-ios:
+        name: iOS Smoke Tests
+        runs-on: macos-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install --prefer-offline
+            - name: Install dependencies
+              run: npm install --prefer-offline
 
-      - name: Download and extract iOS app from latest release
-        run: |
-          gh release download \
-            --repo webdriverio/native-demo-app \
-            --pattern 'ios.simulator.*.zip' \
-            --dir application/ios/
-          cd application/ios && unzip -q *.zip
-          APP=$(find . -name "*.app" -type d | head -1)
-          mv "$APP" test.app
-          rm *.zip
-        env:
-          GH_TOKEN: ${{ github.token }}
+            - name: Download and extract iOS app from latest release
+              run: |
+                  gh release download \
+                    --repo webdriverio/native-demo-app \
+                    --pattern 'ios.simulator.*.zip' \
+                    --dir application/ios/
+                  cd application/ios && unzip -q *.zip
+                  APP=$(find . -name "*.app" -type d | head -1)
+                  mv "$APP" test.app
+                  rm *.zip
+              env:
+                  GH_TOKEN: ${{ github.token }}
 
-      - name: Install Appium XCUITest driver
-        run: ./node_modules/.bin/appium driver install --source npm appium-xcuitest-driver@9.10.5 || true
+            - name: Install Appium XCUITest driver
+              run: ./node_modules/.bin/appium driver install --source npm appium-xcuitest-driver@9.10.5 || true
 
-      # WebDriverAgent is compiled by xcodebuild on first use, which alone can take
-      # several minutes on a cold GitHub-hosted macOS runner. Caching the derived-data
-      # output lets later runs relink incrementally instead of rebuilding from scratch.
-      - name: Cache WebDriverAgent build
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules/appium-xcuitest-driver/node_modules/Build
-            node_modules/appium-xcuitest-driver/node_modules/ModuleCache.noindex
-            node_modules/appium-xcuitest-driver/node_modules/SDKStatCaches.noindex
-          key: wda-build-${{ runner.os }}-xcuitest-9.10.5-${{ hashFiles('package-lock.json') }}
+            # WebDriverAgent is compiled by xcodebuild on first use, which alone can take
+            # several minutes on a cold GitHub-hosted macOS runner. Caching the derived-data
+            # output lets later runs relink incrementally instead of rebuilding from scratch.
+            - name: Cache WebDriverAgent build
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      node_modules/appium-xcuitest-driver/node_modules/Build
+                      node_modules/appium-xcuitest-driver/node_modules/ModuleCache.noindex
+                      node_modules/appium-xcuitest-driver/node_modules/SDKStatCaches.noindex
+                  key: wda-build-${{ runner.os }}-xcuitest-9.10.5-${{ hashFiles('package-lock.json') }}
 
-      - name: Boot iOS Simulator
-        run: |
-          xcrun simctl boot "iPhone 16" || true
-          xcrun simctl bootstatus "iPhone 16" -b
+            - name: Boot iOS Simulator
+              run: |
+                  xcrun simctl boot "iPhone 16" || true
+                  xcrun simctl bootstatus "iPhone 16" -b
 
-      - name: Run iOS smoke tests
-        run: npm run test_ios -- "${{ github.event.inputs.tags }}"
-        env:
-          PLATFORM: ios
-          IOS_PLATFORM_VERSION: '18.5'
-          IOS_DEVICE_NAME: iPhone 16
-          USERNAME: test@webdriver.io
-          PASSWORD: Test1234!
+            - name: Run iOS smoke tests
+              run: npm run test_ios -- "${{ github.event.inputs.tags }}"
+              env:
+                  PLATFORM: ios
+                  IOS_PLATFORM_VERSION: '18.5'
+                  IOS_DEVICE_NAME: iPhone 16
+                  USERNAME: test@webdriver.io
+                  PASSWORD: Test1234!
 
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-reports-${{ github.run_number }}
-          path: reports/
-          retention-days: 7
+            - name: Upload test reports
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ios-reports-${{ github.run_number }}
+                  path: reports/
+                  retention-days: 7

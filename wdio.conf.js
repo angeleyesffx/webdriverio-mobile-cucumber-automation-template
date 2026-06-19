@@ -7,7 +7,7 @@ export const config = {
 
     logLevel: 'info',
     logLevels: {
-        '@wdio/appium-service': 'debug'
+        '@wdio/appium-service': 'debug',
     },
     bail: 0,
     baseUrl: '',
@@ -36,7 +36,7 @@ export const config = {
         strict: false,
         tagExpression: '',
         timeout: 60000,
-        ignoreUndefinedDefinitions: false
+        ignoreUndefinedDefinitions: false,
     },
 
     afterScenario: async function (_world, result) {
@@ -44,5 +44,5 @@ export const config = {
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             await browser.saveScreenshot(`./reports/screenshots/failure_${timestamp}.png`);
         }
-    }
+    },
 };

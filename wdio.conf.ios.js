@@ -9,7 +9,7 @@ const hasApp = existsSync(iosAppPath);
 const appCapability = hasApp
     ? {
           ...(process.env.BUNDLE_ID && { 'appium:bundleId': process.env.BUNDLE_ID }),
-          'appium:app': iosAppPath
+          'appium:app': iosAppPath,
       }
     : { browserName: 'Safari' };
 
@@ -20,15 +20,17 @@ export const config = {
     // Simulator boot (~2min) + WDA xcodebuild compile (verified cold: 10+ min on GitHub runners).
     // The outer client timeout must exceed setup time + inner WDA timeout.
     connectionRetryTimeout: 900000,
-    capabilities: [{
-        'appium:platformVersion': process.env.IOS_PLATFORM_VERSION || '18.5',
-        'appium:platformName': 'iOS',
-        'appium:deviceName': process.env.IOS_DEVICE_NAME || 'iPhone 16',
-        'appium:automationName': 'XCUITest',
-        'appium:wdaLaunchTimeout': 600000,
-        'appium:wdaConnectionTimeout': 600000,
-        'appium:showXcodeLog': true,
-        ...appCapability,
-        'appium:fullReset': true
-    }]
+    capabilities: [
+        {
+            'appium:platformVersion': process.env.IOS_PLATFORM_VERSION || '18.5',
+            'appium:platformName': 'iOS',
+            'appium:deviceName': process.env.IOS_DEVICE_NAME || 'iPhone 16',
+            'appium:automationName': 'XCUITest',
+            'appium:wdaLaunchTimeout': 600000,
+            'appium:wdaConnectionTimeout': 600000,
+            'appium:showXcodeLog': true,
+            ...appCapability,
+            'appium:fullReset': true,
+        },
+    ],
 };

@@ -3,89 +3,89 @@ name: Android Tests
 # Runs automatically on push to main and on manual dispatch.
 # wdio.conf.android.ts auto-detects the APK and uses it; falls back to Chrome if absent.
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: 'Cucumber tag expression (e.g. @smoke, @regression)'
-        required: false
-        default: '@smoke'
+    push:
+        branches: [main]
+    workflow_dispatch:
+        inputs:
+            tags:
+                description: 'Cucumber tag expression (e.g. @smoke, @regression)'
+                required: false
+                default: '@smoke'
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  test-android:
-    name: Android Smoke Tests
-    runs-on: ubuntu-latest
+    test-android:
+        name: Android Smoke Tests
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install --prefer-offline
+            - name: Install dependencies
+              run: npm install --prefer-offline
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+            - uses: actions/setup-java@v4
+              with:
+                  java-version: '17'
+                  distribution: 'temurin'
 
-      - name: Download APK from latest release
-        run: |
-          gh release download \
-            --repo webdriverio/native-demo-app \
-            --pattern '*.apk' \
-            --dir application/android/
-          mv application/android/*.apk application/android/test.apk
-        env:
-          GH_TOKEN: ${{ github.token }}
+            - name: Download APK from latest release
+              run: |
+                  gh release download \
+                    --repo webdriverio/native-demo-app \
+                    --pattern '*.apk' \
+                    --dir application/android/
+                  mv application/android/*.apk application/android/test.apk
+              env:
+                  GH_TOKEN: ${{ github.token }}
 
-      - name: Install Appium UIAutomator2 driver
-        run: ./node_modules/.bin/appium driver install --source npm appium-uiautomator2-driver@3.10.0 || true
+            - name: Install Appium UIAutomator2 driver
+              run: ./node_modules/.bin/appium driver install --source npm appium-uiautomator2-driver@3.10.0 || true
 
-      - name: Enable KVM for hardware acceleration
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
-            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+            - name: Enable KVM for hardware acceleration
+              run: |
+                  echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+                    | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+                  sudo udevadm control --reload-rules
+                  sudo udevadm trigger --name-match=kvm
 
-      - name: Run Android smoke tests
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          PLATFORM: android
-          ANDROID_PLATFORM_VERSION: '13.0'
-          ANDROID_DEVICE_NAME: pixel_6_api_33
-          ANDROID_UDID: emulator-5554
-          USERNAME: ${{ secrets.TEST_USERNAME }}
-          PASSWORD: ${{ secrets.TEST_PASSWORD }}
-          UNLOCK_KEY: ${{ secrets.UNLOCK_KEY }}
-        with:
-          api-level: 33
-          arch: x86_64
-          target: google_apis
-          profile: pixel_6
-          avd-name: pixel_6_api_33
-          force-avd-creation: false
-          emulator-options: >-
-            -no-window
-            -gpu swiftshader_indirect
-            -noaudio
-            -no-boot-anim
-            -camera-back none
-          disable-animations: true
-          script: npm run test_android -- "${{ github.event.inputs.tags || '@smoke' }}"
+            - name: Run Android smoke tests
+              uses: reactivecircus/android-emulator-runner@v2
+              env:
+                  PLATFORM: android
+                  ANDROID_PLATFORM_VERSION: '13.0'
+                  ANDROID_DEVICE_NAME: pixel_6_api_33
+                  ANDROID_UDID: emulator-5554
+                  USERNAME: ${{ secrets.TEST_USERNAME }}
+                  PASSWORD: ${{ secrets.TEST_PASSWORD }}
+                  UNLOCK_KEY: ${{ secrets.UNLOCK_KEY }}
+              with:
+                  api-level: 33
+                  arch: x86_64
+                  target: google_apis
+                  profile: pixel_6
+                  avd-name: pixel_6_api_33
+                  force-avd-creation: false
+                  emulator-options: >-
+                      -no-window
+                      -gpu swiftshader_indirect
+                      -noaudio
+                      -no-boot-anim
+                      -camera-back none
+                  disable-animations: true
+                  script: npm run test_android -- "${{ github.event.inputs.tags || '@smoke' }}"
 
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-reports-${{ github.run_number }}
-          path: reports/
-          retention-days: 7
+            - name: Upload test reports
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: android-reports-${{ github.run_number }}
+                  path: reports/
+                  retention-days: 7

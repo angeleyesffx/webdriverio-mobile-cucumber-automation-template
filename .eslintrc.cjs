@@ -1,28 +1,28 @@
 module.exports = {
     env: {
         es2021: true,
-        node: true
+        node: true,
     },
     extends: 'eslint:recommended',
     overrides: [
         {
             env: { node: true },
             files: ['.eslintrc.cjs'],
-            parserOptions: { sourceType: 'script' }
-        }
+            parserOptions: { sourceType: 'script' },
+        },
     ],
     parserOptions: {
         sourceType: 'module',
-        ecmaVersion: 'latest'
+        ecmaVersion: 'latest',
     },
     globals: {
         browser: 'readonly',
         driver: 'readonly',
         $: 'readonly',
-        $$: 'readonly'
+        $$: 'readonly',
     },
     rules: {
         'no-unused-vars': 'warn',
-        'no-console': 'warn'
-    }
-}
+        'no-console': 'warn',
+    },
+};

@@ -2,14 +2,30 @@ import { $, driver } from '@wdio/globals';
 import Page from './page.js';
 
 class LoginPage extends Page {
-    get screenSelector()  { return '~Login-screen'; }
-    get inputEmail()      { return $('~input-email'); }
-    get inputPassword()   { return $('~input-password'); }
-    get inputRepeatPwd()  { return $('~input-repeat-password'); }
-    get btnLogin()        { return $('~button-LOGIN'); }
-    get btnSignUp()       { return $('~button-SIGN UP'); }
-    get tabLogin()        { return $('~button-login-container'); }
-    get tabSignUp()       { return $('~button-sign-up-container'); }
+    get screenSelector() {
+        return '~Login-screen';
+    }
+    get inputEmail() {
+        return $('~input-email');
+    }
+    get inputPassword() {
+        return $('~input-password');
+    }
+    get inputRepeatPwd() {
+        return $('~input-repeat-password');
+    }
+    get btnLogin() {
+        return $('~button-LOGIN');
+    }
+    get btnSignUp() {
+        return $('~button-SIGN UP');
+    }
+    get tabLogin() {
+        return $('~button-login-container');
+    }
+    get tabSignUp() {
+        return $('~button-sign-up-container');
+    }
 
     async open() {
         await $('~Home').waitForDisplayed({ timeout: 20000 });
